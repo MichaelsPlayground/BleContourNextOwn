@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(connectedDeviceDataReceiver, new IntentFilter((BluetoothHandler.CONNECTED_DEVICE_ACTION)));
         registerReceiver(manufacturerNameDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_MANUFACTURER_NAME));
         registerReceiver(modelNumberDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_MODEL_NUMBER));
+        registerReceiver(currentTimeDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_CURRENT_TIME));
 
         // bluetoothHandler = BluetoothHandler.getInstance(getApplicationContext(), macAddress);
 
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 if (bluetoothHandler != null) {
                     Log.i("Main", "readCurrentTime started");
                     // todo get the address from connectedDevice
-                    //bluetoothHandler.readCurrentTime(macAddressFromScan);
+                    bluetoothHandler.readCurrentTime(connectedDeviceFromBluetoothHandler);
                 }
 
             }
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (bluetoothHandler != null) {
                     Log.i("Main", "readCurrentTime started");
-                    //bluetoothHandler.setCurrentTimeNotification(macAddressFromScan, true);
+                    bluetoothHandler.setCurrentTimeNotification(connectedDeviceFromBluetoothHandler, true);
                 }
 
             }
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (bluetoothHandler != null) {
                     Log.i("Main", "readCurrentTime started");
-                    //bluetoothHandler.setCurrentTimeNotification(macAddressFromScan, false);
+                    bluetoothHandler.setCurrentTimeNotification(connectedDeviceFromBluetoothHandler, false);
                 }
 
             }
@@ -285,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(connectedDeviceDataReceiver);
         unregisterReceiver(manufacturerNameDataReceiver);
         unregisterReceiver(modelNumberDataReceiver);
-
+        unregisterReceiver(currentTimeDataReceiver);
     }
 
     /**
@@ -295,18 +296,20 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver connectedDeviceDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String connectedDeviceString = intent.getStringExtra(BluetoothHandler.CONNECTED_DEVICE_EXTRA);
-            if (connectedDeviceString == null) return;
-            connectedDevice.setText(connectedDeviceString);
+            String dataString = intent.getStringExtra(BluetoothHandler.CONNECTED_DEVICE_EXTRA);
+            if (dataString == null) return;
+            connectedDevice.setText(dataString);
+            connectedDeviceFromBluetoothHandler = dataString.substring(dataString.length()-17);
+            System.out.println("* connectedDeviceFromBluetoothHandler : " + connectedDeviceFromBluetoothHandler);
         }
     };
 
     private final BroadcastReceiver manufacturerNameDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String manufacturerNameString = intent.getStringExtra(BluetoothHandler.MEASUREMENT_MANUFACTURER_NAME_EXTRA);
-            if (manufacturerNameString == null) return;
-            manufacturerName.setText(manufacturerNameString);
+            String dataString = intent.getStringExtra(BluetoothHandler.MEASUREMENT_MANUFACTURER_NAME_EXTRA);
+            if (dataString == null) return;
+            manufacturerName.setText(dataString);
         }
     };
 
@@ -319,4 +322,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final BroadcastReceiver currentTimeDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String dataString = intent.getStringExtra(BluetoothHandler.MEASUREMENT_CURRENT_TIME_EXTRA);
+            if (dataString == null) return;
+            currentTime.setText(dataString);
+        }
+    };
 }

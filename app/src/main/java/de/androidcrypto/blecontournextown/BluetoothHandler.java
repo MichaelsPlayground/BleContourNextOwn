@@ -94,6 +94,7 @@ class BluetoothHandler {
     public void readCurrentTime(String macAddress) {
         // get the peripheral from mainActivity and call to read the data, in the callback they were send back to main
         BluetoothPeripheral bluetoothPeripheral = central.getPeripheral(macAddress);
+        System.out.println("* BH readCurrentTime");
         bluetoothPeripheral.readCharacteristic(CURRENT_TIME_SERVICE_UUID, CURRENT_TIME_CHARACTERISTIC_UUID);
     }
 
@@ -188,6 +189,8 @@ class BluetoothHandler {
             UUID characteristicUUID = characteristic.getUuid();
             BluetoothBytesParser parser = new BluetoothBytesParser(value);
 
+            System.out.println("* BH onCharacteristicUpdate UUID:" + characteristicUUID.toString());
+
             if (characteristicUUID.equals(HEART_BEAT_RATE_MEASUREMENT_CHARACTERISTIC_UUID)) {
                 HeartRateMeasurement measurement = new HeartRateMeasurement(value);
                 Intent intent = new Intent(MEASUREMENT_HEART_BEAT_RATE);
@@ -205,6 +208,7 @@ class BluetoothHandler {
                 Date currentTime = parser.getDateTime();
                 //Log.i("BH", "currentTimne: " + currentTime);
                 Timber.i("Received device time: %s", currentTime);
+                System.out.println("* BH CURRENT_TIME_CHARACTERISTIC_UUID Received device time: " + currentTime);
                 Intent intent = new Intent(MEASUREMENT_CURRENT_TIME);
                 intent.putExtra(MEASUREMENT_CURRENT_TIME_EXTRA, currentTime.toString());
                 sendMeasurement(intent, peripheral);

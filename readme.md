@@ -80,6 +80,7 @@ How to bond with a Contour next ?
 -on smartphone press "OK"
 -on device see the code (e.g. 033545) and enter the code in your smartphone
 -the device is showing the blue light for 3 seconds, now the device is coupled with the smartphone
--now run your app BUT you won't be able to scan for the device as is is bonded/coupled
+-now run your app BUT you won't be able to scan for the device as it is bonded/coupled and the advertisement is stopped
+
 
 
