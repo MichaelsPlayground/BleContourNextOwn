@@ -71,3 +71,15 @@ D/BluetoothPeripheral: writing <01e6070a160c26137800> to characteristic <0000102
 I/BluetoothHandler: SUCCESS: Writing <01e6070a160c26137800> to <00001026-0002-11e2-9e96-0800200c9a66>
 ```
 
+How to bond with a Contour next ?
+-have your app open in the foreground
+-start the device with pressing "OK" button
+-when device is "on" press the "up" button for some seconds until the blue light goes on
+-now the device is in connection mode
+-select the device "Contour..."
+-on smartphone press "OK"
+-on device see the code (e.g. 033545) and enter the code in your smartphone
+-the device is showing the blue light for 3 seconds, now the device is coupled with the smartphone
+-now run your app BUT you won't be able to scan for the device as is is bonded/coupled
+
+
