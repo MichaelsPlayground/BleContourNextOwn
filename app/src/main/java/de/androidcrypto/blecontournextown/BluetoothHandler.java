@@ -75,6 +75,7 @@ class BluetoothHandler {
     // Contour Glucose Service
     public static final UUID CONTOUR_SERVICE_UUID = UUID.fromString("00000000-0002-11E2-9E96-0800200C9A66");
     private static final UUID CONTOUR_CLOCK = UUID.fromString("00001026-0002-11E2-9E96-0800200C9A66");
+    private static final UUID CONTOUR_CHARACTERISTIC_1025 = UUID.fromString("00001025-0002-11E2-9E96-0800200C9A66");
 
     // Local variables
     public BluetoothCentralManager central;
@@ -89,6 +90,15 @@ class BluetoothHandler {
                         message,
                         Toast.LENGTH_SHORT)
                 .show();
+    }
+
+    public void writeChar1025(String macAddress) {
+        // get the peripheral from mainActivity and call to read the data, in the callback they were send back to main
+        BluetoothPeripheral bluetoothPeripheral = central.getPeripheral(macAddress);
+        System.out.println("* BH writeChar1025");
+        //byte[] value = data.getBytes(StandardCharsets.UTF_8);
+        byte[] value = {20,10,30,5}; // {20,10,30,5}
+        bluetoothPeripheral.writeCharacteristic(CONTOUR_SERVICE_UUID, CONTOUR_CHARACTERISTIC_1025, value, WriteType.WITH_RESPONSE);
     }
 
     public void readCurrentTime(String macAddress) {
@@ -170,8 +180,10 @@ class BluetoothHandler {
         @Override
         public void onCharacteristicWrite(@NotNull BluetoothPeripheral peripheral, @NotNull byte[] value, @NotNull BluetoothGattCharacteristic characteristic, @NotNull GattStatus status) {
             if (status == GattStatus.SUCCESS) {
+                System.out.println("BH onCharacteristicWrite SUCCESS");
                 Timber.i("SUCCESS: Writing <%s> to <%s>", bytes2String(value), characteristic.getUuid());
             } else {
+                System.out.println("BH onCharacteristicWrite FAILURE status: " + status.value);
                 Timber.i("ERROR: Failed writing <%s> to <%s> (%s)", bytes2String(value), characteristic.getUuid(), status);
             }
         }

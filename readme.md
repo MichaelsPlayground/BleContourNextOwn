@@ -29,6 +29,8 @@ see https://github.com/MilosKozak/xDrip-1/blob/master/app/src/main/java/com/even
 
 00001025-0002-11e2-9e96-0800200c9a66: indicate, write
 
+
+
 00001026-0002-11e2-9e96-0800200c9a66: indicate, write
 
 set the clock, see https://github.com/weliem/blessed-android/blob/master/app/src/main/java/com/welie/blessedexample/BluetoothHandler.java

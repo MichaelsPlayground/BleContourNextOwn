@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button scanForDevices, getCurrentTime, setCurrentTimeNotification, unsetCurrentTimeNotification;
     Button connectDevice;
+
     String heartRateMeasurementString;
     com.google.android.material.textfield.TextInputEditText connectedDevice;
     com.google.android.material.textfield.TextInputEditText heartRateMeasurement;
@@ -117,6 +118,17 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothHandler.setCurrentTimeNotification(connectedDeviceFromBluetoothHandler, false);
                 }
 
+            }
+        });
+
+        Button writeChar1025 = findViewById(R.id.btnMainSetChar1025);
+        writeChar1025.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bluetoothHandler != null) {
+                    Log.i("Main", "writeChar1025 started");
+                    bluetoothHandler.writeChar1025(connectedDeviceFromBluetoothHandler);
+                }
             }
         });
 
