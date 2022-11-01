@@ -100,8 +100,14 @@ class BluetoothHandler {
 
         // generate a correct value for the time service from a given timestamp
         byte[] value = getExactTime(timestamp, ADJUST_NONE);
-        // write the data to the device
-        bluetoothPeripheral.writeCharacteristic(CURRENT_TIME_SERVICE_UUID, CURRENT_TIME_CHARACTERISTIC_UUID, value, WriteType.WITH_RESPONSE);
+        // If it has the write property we write the current time
+        try {
+            // write the data to the device
+            bluetoothPeripheral.writeCharacteristic(CURRENT_TIME_SERVICE_UUID, CURRENT_TIME_CHARACTERISTIC_UUID, value, WriteType.WITHOUT_RESPONSE);
+        } catch (IllegalArgumentException e) {
+            // do nothing
+            System.out.println("writeCharacteristic not allowed");
+        }
     }
 
     // Adjustment Flags

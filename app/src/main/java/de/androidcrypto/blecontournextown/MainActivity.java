@@ -208,21 +208,21 @@ int componentTimeToTimestamp(int year, int month, int day, int hour, int minute)
 
 
 
-                    try {
-                        //String date = "2014-08-03 15:20:10"; //Replace with your value
-                        String date = selectedDate.getText().toString() + " " + selectedTime.getText().toString();
+                    //try {
+                        String date = "2014-08-03 15:20:10"; //Replace with your value
+                        //String date = selectedDate.getText().toString() + " " + selectedTime.getText().toString();
                         System.out.println("string: " + date);
                         Timestamp timestamp = Timestamp.valueOf(date);
                         // Convert timestamp to long for use
                         long timeParameter = timestamp.getTime();
                         System.out.println("timeParameter: " + timeParameter);
                         bluetoothHandler.setTimeOnDevice(connectedDeviceFromBluetoothHandler, timeParameter);
-                    } catch (IllegalArgumentException e) {
+                    /*} catch (IllegalArgumentException e) {
                         // so date and time was given, abort
                         System.out.println("to set the time on the device you need to select the date and the time first");
                         writeToUiToastLong("to set the time on the device you need to select the date and the time first");
 
-                    }
+                    }*/
                 }
             }
         });
