@@ -28,6 +28,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     Button connectDevice;
 
     String heartRateMeasurementString;
+    com.google.android.material.textfield.TextInputLayout sendData;
     com.google.android.material.textfield.TextInputEditText connectedDevice;
     com.google.android.material.textfield.TextInputEditText heartRateMeasurement;
     com.google.android.material.textfield.TextInputEditText currentTime;
@@ -69,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
         currentTime = findViewById(R.id.etMainCurrentTime);
         manufacturerName = findViewById(R.id.etMainManufacturerNameMeasurement);
         requestedModelNumber = findViewById(R.id.etMainModelNumberMeasurement);
+
+        sendData = findViewById(R.id.etMainInputWithEnterIconLayout);
+        sendData.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeToUiToastLong("send icon pressed");
+            }
+        });
 
         // get the connectedDevice in case of "back key" pushed
         if (connectedDeviceFromBluetoothHandler != null) {

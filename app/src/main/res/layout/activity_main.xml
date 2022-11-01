@@ -357,7 +357,6 @@
                 app:boxCornerRadiusTopStart="5dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="15"
-                app:endIconCheckable="true"
                 app:endIconContentDescription="Send"
                 app:endIconDrawable="@drawable/ic_baseline_send_24"
                 app:endIconMode="custom"
