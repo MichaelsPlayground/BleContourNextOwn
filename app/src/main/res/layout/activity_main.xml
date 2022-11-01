@@ -175,6 +175,57 @@
                 android:layout_marginBottom="8dp"
                 android:text="unset current time notification" />
 
+            <Button
+                android:id="@+id/btnMainSelectDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="select the date" />
+
+
+            <TextView
+                android:id="@+id/tvMainSelectedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="the selected date is..." />
+
+            <Button
+                android:id="@+id/btnMainSelectTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="select the time" />
+
+            <TextView
+                android:id="@+id/tvMainSelectedTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="the selected time is..." />
+
+            <Button
+                android:id="@+id/btnMainSetDeviceTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="set the date &amp; time on the device" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etMainManufacturerNameDecoration"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

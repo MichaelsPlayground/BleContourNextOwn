@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
@@ -21,10 +23,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +40,7 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button scanForDevices, getCurrentTime, setCurrentTimeNotification, unsetCurrentTimeNotification;
+    //Button scanForDevices, getCurrentTime, setCurrentTimeNotification, unsetCurrentTimeNotification, setTime;
     Button connectDevice;
 
     String heartRateMeasurementString;
@@ -42,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     com.google.android.material.textfield.TextInputEditText manufacturerName;
     com.google.android.material.textfield.TextInputEditText requestedModelNumber; // new for write
     Button getModelNumber, setModelNumber; // new for write and read
+
+    int mYear, mMonth, mDay, mHour, mMinute, mSecond = 0; // filled by date and time pickers
 
     BluetoothHandler bluetoothHandler;
     String connectedDeviceFromBluetoothHandler;
@@ -121,6 +131,102 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TextView selectedDate = findViewById(R.id.tvMainSelectedDate);
+
+        Button selectDate = findViewById(R.id.btnMainSelectDate);
+        selectDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                //selectedDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                selectedDate.setText(year + "-" + (monthOfYear + 1) + "-" +  dayOfMonth);
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+        TextView selectedTime = findViewById(R.id.tvMainSelectedTime);
+
+        Button selectTime = findViewById(R.id.btnMainSelectTime);
+        selectTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                selectedTime.setText(hourOfDay + ":" + minute + ":00");
+                            }
+                        }, mHour, mMinute, false);
+                timePickerDialog.show();
+            }
+        });
+
+        Button setTime = findViewById(R.id.btnMainSetDeviceTime);
+        setTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bluetoothHandler != null) {
+                    Log.i("Main", "set time");
+
+/*
+int componentTimeToTimestamp(int year, int month, int day, int hour, int minute) {
+
+    Calendar c = Calendar.getInstance();
+    c.set(Calendar.YEAR, year);
+    c.set(Calendar.MONTH, month);
+    c.set(Calendar.DAY_OF_MONTH, day);
+    c.set(Calendar.HOUR, hour);
+    c.set(Calendar.MINUTE, minute);
+    c.set(Calendar.SECOND, 0);
+    c.set(Calendar.MILLISECOND, 0);
+
+    return (int) (c.getTimeInMillis() / 1000L);
+}
+ */
+
+
+
+                    try {
+                        //String date = "2014-08-03 15:20:10"; //Replace with your value
+                        String date = selectedDate.getText().toString() + " " + selectedTime.getText().toString();
+                        System.out.println("string: " + date);
+                        Timestamp timestamp = Timestamp.valueOf(date);
+                        // Convert timestamp to long for use
+                        long timeParameter = timestamp.getTime();
+                        System.out.println("timeParameter: " + timeParameter);
+                        bluetoothHandler.setTimeOnDevice(connectedDeviceFromBluetoothHandler, timeParameter);
+                    } catch (IllegalArgumentException e) {
+                        // so date and time was given, abort
+                        System.out.println("to set the time on the device you need to select the date and the time first");
+                        writeToUiToastLong("to set the time on the device you need to select the date and the time first");
+
+                    }
+                }
+            }
+        });
+
         Button writeChar1025 = findViewById(R.id.btnMainSetChar1025);
         writeChar1025.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +238,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void writeToUiToastLong(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(getApplicationContext(),
+                    message,
+                    Toast.LENGTH_LONG).show();
+        });
     }
 
     /**
